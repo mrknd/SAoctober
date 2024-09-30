@@ -81,7 +81,6 @@
 {% endblock %}
 
 {% include 'includes/footer.html' %}
-{% include 'includes/mobile_icon_phone.html' %}
 {# ----- Mobile Gallery -----#}
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -201,6 +200,14 @@
             }
         }
     });
+</script>
+
+<script type="text/javascript">
+  (function(d, w, s) {
+  var widgetHash = '1una6m6b9nzxaw16atlq', gcw = d.createElement(s); gcw.type = 'text/javascript'; gcw.async = true;
+  gcw.src = '//widgets.binotel.com/getcall/widgets/'+ widgetHash +'.js';
+  var sn = d.getElementsByTagName(s)[0]; sn.parentNode.insertBefore(gcw, sn);
+  })(document, window, 'script');
 </script>
 {% block script %}
 
