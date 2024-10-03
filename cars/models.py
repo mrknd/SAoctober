@@ -19,9 +19,9 @@ class CarBrand(models.Model):
     def __str__(self):
         return self.car_brand_name
 
-    # def get_min_price(self):
-    #     min_price_car = self.car_set.order_by('price').first()
-    #     return min_price_car.price if min_price_car else None
+    def get_min_price(self):
+        min_price_car = self.car_set.order_by('price').first()
+        return min_price_car.price if min_price_car else None
 
 
 class Car(models.Model):
@@ -91,8 +91,8 @@ class Car(models.Model):
         ordering = ['-updated_at']
         verbose_name_plural = 'Всі Авто'
 
-    # def get_absolute_url(self):
-    #     return reverse('catalog:car_detail', args=[self.slug])
+    def get_absolute_url(self):
+        return reverse('catalog:car_detail', args=[self.slug])
 
     def __str__(self):
         return self.car_title

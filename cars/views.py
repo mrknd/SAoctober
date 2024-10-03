@@ -22,7 +22,7 @@ def cars_catalog(request):
     price_max = request.GET.get('price_max', '')
     sort_price = request.GET.get('sort_price', '')
 
-    car_list = Car.objects.all()
+    car_list = Car.objects.filter(in_stock=False)
 
     if selected_car_brand:
         car_list = car_list.filter(car_brand_id=selected_car_brand)
@@ -74,7 +74,7 @@ def cars_catalog(request):
         'price_min': price_min,
         'price_max': price_max,
         'sort_price': sort_price,
-        'car_list': cars,  # Використовується пагінатор
+        'car_list': cars,
     }
 
     return render(request, 'pages/catalog.html', context)
@@ -96,7 +96,7 @@ def cars_in_stock(request):
     price_max = request.GET.get('price_max', '')
     sort_price = request.GET.get('sort_price', '')
 
-    car_list = Car.objects.filter(in_stock=True)  # Фільтруємо тільки доступні авто
+    car_list = Car.objects.filter(in_stock=True)
 
     if selected_car_brand:
         car_list = car_list.filter(car_brand_id=selected_car_brand)
@@ -124,7 +124,7 @@ def cars_in_stock(request):
         elif sort_price == 'desc':
             car_list = car_list.order_by('-price')
 
-    paginator = Paginator(car_list, 9)
+    paginator = Paginator(car_list, 6)
     page = request.GET.get('page')
 
     try:
@@ -148,7 +148,7 @@ def cars_in_stock(request):
         'price_min': price_min,
         'price_max': price_max,
         'sort_price': sort_price,
-        'car_list': cars,  # Використовується пагінатор
+        'car_list': cars,
     }
 
     return render(request, 'pages/catalog_in_stock.html', context)
@@ -157,51 +157,53 @@ def cars_in_stock(request):
 def car_detail(request, slug):
     single_car = get_object_or_404(Car, slug=slug)
 
-    # Отримуємо схожі автомобілі тієї ж марки, виключаючи поточний автомобіль
     similar_cars = Car.objects.filter(car_brand=single_car.car_brand).exclude(id=single_car.id)[:6]
 
     context = {
         'single_car': single_car,
-        'similar_cars': similar_cars,  # Додаємо схожі автомобілі в контекст
+        'similar_cars': similar_cars,
     }
     return render(request=request, template_name='pages/car_detail.html', context=context)
 
 
 def cars_by_brand(request, car_brand_slug):
-    # Отримання унікальних значень для фільтрів
     transmission = Car.objects.order_by('transmission').values_list('transmission', flat=True).distinct()
     body_style = Car.objects.order_by('body_style').values_list('body_style', flat=True).distinct()
     car_brand = CarBrand.objects.all().distinct()
 
-    # Отримання бренду
     brand = get_object_or_404(CarBrand, slug=car_brand_slug)
 
-    # Початковий запит на фільтрацію
     car_list = Car.objects.filter(car_brand=brand)
 
-    # Отримання вибраних значень з GET-запитів
     selected_transmission = request.GET.get('transmission', '')
     selected_body_style = request.GET.get('body_style', '')
     price_min = request.GET.get('price_min', '')
     price_max = request.GET.get('price_max', '')
 
-    # Фільтрація за трансмісією
     if selected_transmission:
         car_list = car_list.filter(transmission=selected_transmission)
 
-    # Фільтрація за типом кузова
     if selected_body_style:
         car_list = car_list.filter(body_style=selected_body_style)
 
-    # Фільтрація за ціною
     if price_min:
         car_list = car_list.filter(price__gte=price_min)
     if price_max:
         car_list = car_list.filter(price__lte=price_max)
 
+    paginator = Paginator(car_list, 3)
+    page = request.GET.get('page')
+
+    try:
+        cars = paginator.page(page)
+    except PageNotAnInteger:
+        cars = paginator.page(1)
+    except EmptyPage:
+        cars = paginator.page(paginator.num_pages)
+
     context = {
         'brand': brand,
-        'cars': car_list,  # Використовуємо відфільтрований список
+        'car_list': cars,
         'transmission': transmission,
         'body_style': body_style,
         'car_brand': car_brand,

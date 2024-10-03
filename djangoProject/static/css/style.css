@@ -448,6 +448,10 @@ nav ul li a:hover::after {
 
 /* ----------  Modal Window ---------- */
 /* Modal Styles */
+
+input {
+    box-sizing: border-box;
+}
 .custom-modal {
     display: none;
     position: fixed;
@@ -525,7 +529,7 @@ nav ul li a:hover::after {
 }
 
 .submit-button:hover {
-    background-color: #444;
+    background-color: var(--brown);
     transform: scale(1.05);
 }
 
@@ -533,9 +537,13 @@ nav ul li a:hover::after {
     position: absolute;
     top: 15px;
     right: 20px;
-    color: #a10d0d;
+    color: var(--smoothy);
     font-size: 44px;
     cursor: pointer;
+}
+
+.close-btn:hover {
+    color: #a10d0d;
 }
 
 .iti__dropdown {
@@ -1833,7 +1841,7 @@ nav ul li a:hover::after {
 }
 
 .specifications_car_detail {
-    border: 1px solid var(--gold);
+    border: 1px solid  rgba(194, 153, 88, 0.5);
     padding: 20px;
     border-radius: 8px;
     background-color: #000;
@@ -1855,6 +1863,10 @@ nav ul li a:hover::after {
     margin: 0 0 24px;
     color: var(--gold);
     font-weight: 600;
+}
+
+.specifications_car_detail h3 {
+    color: #dcdcdc;
 }
 
 .specifications_car_detail ul {
@@ -1935,7 +1947,7 @@ nav ul li a:hover::after {
 .container__flex {
     display: flex;
     justify-content: space-between;
-    border: 1px solid var(--gold);
+    border: 1px solid rgba(194, 153, 88, 0.6);
     padding: 20px;
     border-radius: 8px;
     background-color: #000;

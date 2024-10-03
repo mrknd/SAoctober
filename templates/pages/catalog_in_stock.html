@@ -204,17 +204,17 @@
                                 <div class="car-image">
                                     <a href="{{ car.get_absolute_url }}">
                                         {% if car.car_title_photo %}
-                                            <img src="{{ car.car_title_photo.url }}" alt="Car Image"
+                                            <img src="{{ car.car_title_photo.url }}" alt="Car Image" loading="lazy"
                                                  class="default-image"/>
                                         {% endif %}
                                         {% if car.car_photo_1 %}
-                                            <img src="{{ car.car_photo_1.url }}" alt="Car Image Hover"
+                                            <img src="{{ car.car_photo_1.url }}" alt="Car Image Hover" loading="lazy"
                                                  class="hover-image"/>
                                         {% endif %}
                                     </a>
                                 </div>
                                 <div class="car-details">
-                                    <a href="">
+                                    <a href="{{ car.get_absolute_url }}">
                                         <div class="car-title">{{ car.car_title }}</div>
                                     </a>
                                     <div class="car-info">

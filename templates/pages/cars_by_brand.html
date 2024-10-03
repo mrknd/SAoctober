@@ -2,12 +2,58 @@
 
 {% load static %}
 {% load humanize %}
+
+{% block title %}Spirit Auto | Купити авто зі США, Канади, Кореї в Україні. Економія до 40%.{% endblock %}
+{% block meta %}Купити авто зі США від Spirit Auto. Економія до 40%. Обирайте серед широкого асортименту автомобілів з
+    Америки, Канади, Кореї. Надійні та перевірені авто з гарантією.{% endblock %}
+
+{% block og_title %}Купити авто зі США від Spirit Auto - Всі доступні авто в Україні. Економія до 40%.{% endblock %}
+
+{% block og_description %}Перегляньте наш каталог авто зі США. Економія до 40%. Компанія Spirit Auto пропонує великий
+    вибір автомобілів з Америки під ключ. Зручний фільтр, детальні характеристики та актуальні ціни на авто зі США,
+    Кореї, Канади в Україні.{% endblock %}
+
+{% block og_image %}{% static 'img/favicon/favicon-256x256.png' %}{% endblock %}
+
+{% block og_url %}{{ request.build_absolute_uri }}{% endblock %}
+
+{% block structured_data %}
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org/",
+          "@type": "Organization",
+          "name": "Spirit Auto - Купити авто зі США, Канади, Кореї. Економія до 40%.",
+          "image": "{% static 'img/favicon/favicon-256x256.png' %}",
+          "description": "Купити авто зі США від Spirit Auto. Економія до 40%. Перегляньте наш асортимент автомобілів з Америки, виберіть своє авто та замовте доставку під ключ. Висока якість, надійність та гарантія.",
+          "brand": {
+            "@type": "Brand",
+            "name": "Spirit Auto"
+          },
+          "offers": {
+            "@type": "AggregateOffer",
+            "url": "{{ request.build_absolute_uri }}",
+            "lowPrice": "3000",
+            "highPrice": "120000",
+            "priceCurrency": "USD",
+            "offerCount": "650",
+            "itemCondition": "https://schema.org/UsedCondition",
+            "availability": "https://schema.org/InStock"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+380XXXXXXXXX",
+            "contactType": "Customer Service",
+            "areaServed": "UA",
+            "availableLanguage": "Ukrainian"
+          }
+        }
+    </script>
+{% endblock %}
+
 {% block content %}
     <main style="background: black;">
-
         <section style="border-radius: 15px; background-color: #000; border-top: 1px solid #c29958;
                                 border-bottom: 1px solid #c29958; padding-bottom: 3rem;">
-
             <div class="container__main__detail-car">
                 <button id="toggle-filters-button" class="toggle-filters-button__detail-car">
                     <img src="{% static 'img/icons/filter-sort-filtering.svg' %}" alt="icon"
@@ -151,23 +197,23 @@
                 </div>
 
                 <div class="car-list">
-                    {% for car in cars %}
+                    {% for car in car_list %}
                         <div class="car-link__detail-car">
                             <div class="car-card">
                                 <div class="car-image">
                                     <a href="{{ car.get_absolute_url }}">
                                         {% if car.car_title_photo %}
-                                            <img src="{{ car.car_title_photo.url }}" alt="Car Image"
+                                            <img src="{{ car.car_title_photo.url }}" alt="Car Image" loading="lazy"
                                                  class="default-image"/>
                                         {% endif %}
                                         {% if car.car_photo_1 %}
-                                            <img src="{{ car.car_photo_1.url }}" alt="Car Image Hover"
+                                            <img src="{{ car.car_photo_1.url }}" alt="Car Image Hover" loading="lazy"
                                                  class="hover-image"/>
                                         {% endif %}
                                     </a>
                                 </div>
                                 <div class="car-details">
-                                    <a href="">
+                                    <a href="{{ car.get_absolute_url }}">
                                         <div class="car-title">{{ car.car_title }}</div>
                                     </a>
                                     <div class="car-info">
@@ -211,40 +257,30 @@
 
             {% include 'includes/pagination.html' %}
         </section>
-
-
     </main>
 {% endblock %}
 
 {% block script %}
-
     <script>
         //--------------------- Hide Filter -------------------
         document.addEventListener("DOMContentLoaded", function () {
-            const toggleButtonDetailCar = document.querySelector(
-                ".toggle-filters-button__detail-car"
-            );
-            const filtersContainerDetailCar = document.querySelector(
-                ".filters-container__detail-car"
-            );
+            const toggleButton = document.getElementById("toggle-filters-button");
+            const filtersContainer = document.getElementById("filters-container");
 
-            toggleButtonDetailCar.addEventListener("click", function () {
-                filtersContainerDetailCar.classList.toggle("active");
+            if (window.innerWidth < 768) {
+                filtersContainer.style.display = "none";
+            }
 
-                if (filtersContainerDetailCar.classList.contains("active")) {
-                    toggleButtonDetailCar.innerHTML =
-                        '<img src="{% static 'img/icons/filter-sort-filtering.svg' %}" alt="icon" style="width: 20px; height: 20px; margin-right: 5px;"> Сховати фільтри';
+            toggleButton.addEventListener("click", function () {
+                if (filtersContainer.style.display === "none" || filtersContainer.style.display === "") {
+                    filtersContainer.style.display = "block";
+                    toggleButton.innerHTML = '<img src="{% static 'img/icons/filter-sort-filtering.svg' %}" alt="icon" style="width: 20px; height: 20px; margin-right: 5px;"> Сховати фільтри';
                 } else {
-                    toggleButtonDetailCar.innerHTML =
-                        '<img src="{% static 'img/icons/filter-sort-filtering.svg' %}" alt="icon" style="width: 20px; height: 20px; margin-right: 5px;"> Показати фільтри';
+                    filtersContainer.style.display = "none";
+                    toggleButton.innerHTML = '<img src="{% static 'img/icons/filter-sort-filtering.svg' %}" alt="icon" style="width: 20px; height: 20px; margin-right: 5px;"> Показати фільтри';
                 }
             });
         });
         //--------------------- End Hide Filter -------------------
-
-
     </script>
-
-
-
 {% endblock %}
